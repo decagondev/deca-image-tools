@@ -1,3 +1,6 @@
+import { createCanvas, ImageData as CanvasImageData } from 'canvas';
+import * as fs from 'fs';
+
 export function edgeDetect(imageData: ImageData): ImageData {
     const width = imageData.width;
     const height = imageData.height;
@@ -220,6 +223,36 @@ export function skewImage(imageData: ImageData, skewX: number, skewY: number): I
     }
 
     return output;
+}
+
+
+
+
+export function saveImage(imageData: ImageData, filePath: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+        const width = imageData.width;
+        const height = imageData.height;
+        const canvas = createCanvas(width, height);
+        const ctx = canvas.getContext('2d');
+
+        const canvasImageData = new CanvasImageData(imageData.data, width, height);
+        ctx.putImageData(canvasImageData, 0, 0);
+
+        // Save canvas as an image file
+        canvas.toBuffer((err, buffer) => {
+            if (err) {
+                reject(err);
+            } else {
+                fs.writeFile(filePath, buffer, (writeErr) => {
+                    if (writeErr) {
+                        reject(writeErr);
+                    } else {
+                        resolve();
+                    }
+                });
+            }
+        });
+    });
 }
 
 

@@ -38,7 +38,6 @@
     "ts-jest": "^29.1.0",
     "typescript": "^5.0.4"
   },
-  "peerDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/decagondev/deca-image-tools.git"
@@ -46,5 +45,8 @@
   "bugs": {
     "url": "https://github.com/decagondev/deca-image-tools/issues"
   },
-  "homepage": "https://github.com/decagondev/deca-image-tools#readme"
+  "homepage": "https://github.com/decagondev/deca-image-tools#readme",
+  "dependencies": {
+    "canvas": "^2.11.2"
+  }
 }
