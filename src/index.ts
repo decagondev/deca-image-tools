@@ -149,3 +149,17 @@ export function colorize(imageData: ImageData, color: { r: number; g: number; b:
 
     return output;
 }
+
+export function invertColors(imageData: ImageData): ImageData {
+    const output = new ImageData(imageData.width, imageData.height);
+
+    for (let i = 0; i < imageData.data.length; i += 4) {
+        output.data[i] = 255 - imageData.data[i];
+        output.data[i + 1] = 255 - imageData.data[i + 1];
+        output.data[i + 2] = 255 - imageData.data[i + 2];
+        output.data[i + 3] = imageData.data[i + 3];
+    }
+
+    return output;
+}
+
