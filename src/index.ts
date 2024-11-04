@@ -46,6 +46,44 @@ export function edgeDetect(imageData: ImageData): ImageData {
     return output;
 }
 
+export function gaussianBlur(imageData: ImageData, radius: number = 1): ImageData {
+    const width = imageData.width;
+    const height = imageData.height;
+    const output = new ImageData(width, height);
+
+    const kernel = [
+        [1, 2, 1],
+        [2, 4, 2],
+        [1, 2, 1]
+    ];
+    const kernelWeight = 16;
+
+    for (let y = 1; y < height - 1; y++) {
+        for (let x = 1; x < width - 1; x++) {
+            let r = 0, g = 0, b = 0;
+
+            for (let ky = -1; ky <= 1; ky++) {
+                for (let kx = -1; kx <= 1; kx++) {
+                    const idx = ((y + ky) * width + (x + kx)) * 4;
+                    const weight = kernel[ky + 1][kx + 1];
+
+                    r += imageData.data[idx] * weight;
+                    g += imageData.data[idx + 1] * weight;
+                    b += imageData.data[idx + 2] * weight;
+                }
+            }
+
+            const outputIdx = (y * width + x) * 4;
+            output.data[outputIdx] = r / kernelWeight;
+            output.data[outputIdx + 1] = g / kernelWeight;
+            output.data[outputIdx + 2] = b / kernelWeight;
+            output.data[outputIdx + 3] = 255;
+        }
+    }
+
+    return output;
+}
+
 export function colorize(imageData: ImageData, color: { r: number; g: number; b: number }): ImageData {
     const output = new ImageData(imageData.width, imageData.height);
 
