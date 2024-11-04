@@ -122,6 +122,20 @@ export function sharpen(imageData: ImageData): ImageData {
 }
 
 
+export function adjustBrightness(imageData: ImageData, factor: number): ImageData {
+    const output = new ImageData(imageData.width, imageData.height);
+
+    for (let i = 0; i < imageData.data.length; i += 4) {
+        output.data[i] = Math.min(255, imageData.data[i] * factor);
+        output.data[i + 1] = Math.min(255, imageData.data[i + 1] * factor);
+        output.data[i + 2] = Math.min(255, imageData.data[i + 2] * factor);
+        output.data[i + 3] = imageData.data[i + 3];
+    }
+
+    return output;
+}
+
+
 export function colorize(imageData: ImageData, color: { r: number; g: number; b: number }): ImageData {
     const output = new ImageData(imageData.width, imageData.height);
 
