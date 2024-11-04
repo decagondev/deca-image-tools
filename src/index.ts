@@ -84,6 +84,44 @@ export function gaussianBlur(imageData: ImageData, radius: number = 1): ImageDat
     return output;
 }
 
+export function sharpen(imageData: ImageData): ImageData {
+    const width = imageData.width;
+    const height = imageData.height;
+    const output = new ImageData(width, height);
+
+    const kernel = [
+        [0, -1, 0],
+        [-1, 5, -1],
+        [0, -1, 0]
+    ];
+
+    for (let y = 1; y < height - 1; y++) {
+        for (let x = 1; x < width - 1; x++) {
+            let r = 0, g = 0, b = 0;
+
+            for (let ky = -1; ky <= 1; ky++) {
+                for (let kx = -1; kx <= 1; kx++) {
+                    const idx = ((y + ky) * width + (x + kx)) * 4;
+                    const weight = kernel[ky + 1][kx + 1];
+
+                    r += imageData.data[idx] * weight;
+                    g += imageData.data[idx + 1] * weight;
+                    b += imageData.data[idx + 2] * weight;
+                }
+            }
+
+            const outputIdx = (y * width + x) * 4;
+            output.data[outputIdx] = Math.min(255, Math.max(0, r));
+            output.data[outputIdx + 1] = Math.min(255, Math.max(0, g));
+            output.data[outputIdx + 2] = Math.min(255, Math.max(0, b));
+            output.data[outputIdx + 3] = 255;
+        }
+    }
+
+    return output;
+}
+
+
 export function colorize(imageData: ImageData, color: { r: number; g: number; b: number }): ImageData {
     const output = new ImageData(imageData.width, imageData.height);
 
