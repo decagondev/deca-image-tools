@@ -197,3 +197,29 @@ export function rotateImage(imageData: ImageData, degrees: number): ImageData {
     return output;
 }
 
+export function skewImage(imageData: ImageData, skewX: number, skewY: number): ImageData {
+    const width = imageData.width;
+    const height = imageData.height;
+    const output = new ImageData(width, height);
+
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const skewedX = Math.floor(x + skewY * y);
+            const skewedY = Math.floor(y + skewX * x);
+
+            if (skewedX >= 0 && skewedX < width && skewedY >= 0 && skewedY < height) {
+                const srcIdx = (y * width + x) * 4;
+                const destIdx = (skewedY * width + skewedX) * 4;
+
+                output.data[destIdx] = imageData.data[srcIdx];
+                output.data[destIdx + 1] = imageData.data[srcIdx + 1];
+                output.data[destIdx + 2] = imageData.data[srcIdx + 2];
+                output.data[destIdx + 3] = imageData.data[srcIdx + 3];
+            }
+        }
+    }
+
+    return output;
+}
+
+
