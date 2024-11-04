@@ -1,6 +1,6 @@
 # deca-image-tools
 
-A lightweight TypeScript library for image processing operations, focusing on edge detection and color manipulation.
+A lightweight TypeScript library for image processing operations, offering a variety of filters and transformations including edge detection, blur effects, and color manipulation.
 
 ## Installation
 
@@ -11,7 +11,11 @@ npm install deca-image-tools
 ## Features
 
 - Edge detection using Sobel operators
+- Gaussian blur filter
+- Image sharpening
+- Brightness adjustment
 - Image colorization
+- Color inversion
 - TypeScript support out of the box
 - Zero dependencies
 - Fully typed API
@@ -37,21 +41,36 @@ const edgedImage = edgeDetect(imageData);
 ctx.putImageData(edgedImage, 0, 0);
 ```
 
-### Colorization
+### Gaussian Blur
 
-The `colorize` function applies a color tint to an image:
+The `gaussianBlur` function applies a Gaussian blur effect to smooth the image:
 
 ```typescript
-import { colorize } from 'deca-image-tools';
+import { gaussianBlur } from 'deca-image-tools';
 
-// Define your color (RGB values from 0-255)
-const color = { r: 255, g: 0, b: 0 }; // Red tint
+// Apply Gaussian blur with default radius
+const blurredImage = gaussianBlur(imageData);
 
-// Apply colorization
+// Or specify a custom radius
+const customBlurredImage = gaussianBlur(imageData, 2);
+```
+
+### Color Manipulation
+
+The library provides several color manipulation functions:
+
+```typescript
+import { colorize, invertColors, adjustBrightness } from 'deca-image-tools';
+
+// Apply a red tint
+const color = { r: 255, g: 0, b: 0 };
 const colorizedImage = colorize(imageData, color);
 
-// Draw the result back to canvas
-ctx.putImageData(colorizedImage, 0, 0);
+// Invert colors
+const invertedImage = invertColors(imageData);
+
+// Adjust brightness (factor > 1 brightens, < 1 darkens)
+const brightenedImage = adjustBrightness(imageData, 1.5);
 ```
 
 ## API Reference
@@ -66,6 +85,38 @@ Parameters:
 Returns:
 - New ImageData object containing the edge-detected image
 
+### gaussianBlur(imageData: ImageData, radius?: number): ImageData
+
+Applies a Gaussian blur effect to the image.
+
+Parameters:
+- `imageData`: ImageData object containing the source image
+- `radius`: Optional blur radius (default: 1)
+
+Returns:
+- New ImageData object containing the blurred image
+
+### sharpen(imageData: ImageData): ImageData
+
+Applies a sharpening filter to the image.
+
+Parameters:
+- `imageData`: ImageData object containing the source image
+
+Returns:
+- New ImageData object containing the sharpened image
+
+### adjustBrightness(imageData: ImageData, factor: number): ImageData
+
+Adjusts the brightness of an image.
+
+Parameters:
+- `imageData`: ImageData object containing the source image
+- `factor`: Brightness adjustment factor (>1 brightens, <1 darkens)
+
+Returns:
+- New ImageData object with adjusted brightness
+
 ### colorize(imageData: ImageData, color: { r: number; g: number; b: number }): ImageData
 
 Applies a color tint to an image.
@@ -77,12 +128,23 @@ Parameters:
 Returns:
 - New ImageData object containing the colorized image
 
+### invertColors(imageData: ImageData): ImageData
+
+Inverts the colors of an image.
+
+Parameters:
+- `imageData`: ImageData object containing the source image
+
+Returns:
+- New ImageData object with inverted colors
+
 ## Technical Details
 
 - The edge detection algorithm uses Sobel operators for gradient calculation
-- Images are converted to grayscale before edge detection
+- Gaussian blur uses a 3x3 kernel with customizable radius
+- Sharpening uses a 3x3 kernel matrix
 - All operations create new ImageData objects, leaving the original unchanged
-- Alpha channel is preserved in colorization operations
+- Alpha channel is preserved in color manipulation operations
 
 ## Project Structure
 
@@ -136,9 +198,10 @@ The package supports all modern browsers that implement the Canvas API:
 
 ## Performance Considerations
 
-- Edge detection is performed on the CPU and may be computationally intensive for large images
+- Image processing operations are performed on the CPU and may be computationally intensive for large images
 - Consider downscaling large images before processing
 - All operations are synchronous and will block the main thread
+- The Gaussian blur operation may be particularly intensive on large images
 
 ## Contributing
 
@@ -163,14 +226,20 @@ Tom Tarpey (decagondev)
 
 ## Changelog
 
+### 1.0.1
+- Gaussian blur filter
+- Image sharpening
+- Brightness adjustment
+- Color inversion support
+
 ### 1.0.0
 - Initial release
 - Edge detection implementation
-- Image colorization support
+- Image colorization
 
 ## Acknowledgments
 
-- This package implements the Sobel edge detection algorithm, a fundamental technique in computer vision and image processing
+- This package implements several fundamental image processing algorithms including the Sobel edge detection algorithm and Gaussian blur
 
 ## Support
 

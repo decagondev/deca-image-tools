@@ -1,6 +1,6 @@
 {
   "name": "deca-image-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A lightweight TypeScript library for image processing operations",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,6 +18,10 @@
     "image-processing",
     "edge-detection",
     "colorize",
+    "gaussian-blur",
+    "image-sharpening",
+    "brightness-adjustment",
+    "color-inversion",
     "typescript",
     "canvas",
     "sobel"

@@ -163,3 +163,37 @@ export function invertColors(imageData: ImageData): ImageData {
     return output;
 }
 
+
+export function rotateImage(imageData: ImageData, degrees: number): ImageData {
+    const width = imageData.width;
+    const height = imageData.height;
+    const angle = (degrees * Math.PI) / 180;
+    const cosA = Math.cos(angle);
+    const sinA = Math.sin(angle);
+
+    const output = new ImageData(width, height);
+    const centerX = width / 2;
+    const centerY = height / 2;
+
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const dx = x - centerX;
+            const dy = y - centerY;
+            const srcX = Math.floor(centerX + dx * cosA - dy * sinA);
+            const srcY = Math.floor(centerY + dx * sinA + dy * cosA);
+
+            if (srcX >= 0 && srcX < width && srcY >= 0 && srcY < height) {
+                const srcIdx = (srcY * width + srcX) * 4;
+                const destIdx = (y * width + x) * 4;
+
+                output.data[destIdx] = imageData.data[srcIdx];
+                output.data[destIdx + 1] = imageData.data[srcIdx + 1];
+                output.data[destIdx + 2] = imageData.data[srcIdx + 2];
+                output.data[destIdx + 3] = imageData.data[srcIdx + 3];
+            }
+        }
+    }
+
+    return output;
+}
+
