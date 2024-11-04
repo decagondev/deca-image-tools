@@ -1,6 +1,6 @@
 # deca-image-tools
 
-A lightweight TypeScript library for image processing operations, offering a variety of filters and transformations including edge detection, blur effects, and color manipulation.
+A lightweight TypeScript library for image processing operations, offering a variety of filters, transformations including edge detection, blur effects, color manipulation, and image transformations.
 
 ## Installation
 
@@ -16,6 +16,9 @@ npm install deca-image-tools
 - Brightness adjustment
 - Image colorization
 - Color inversion
+- Image rotation
+- Image skewing
+- Image file saving
 - TypeScript support out of the box
 - Zero dependencies
 - Fully typed API
@@ -71,6 +74,31 @@ const invertedImage = invertColors(imageData);
 
 // Adjust brightness (factor > 1 brightens, < 1 darkens)
 const brightenedImage = adjustBrightness(imageData, 1.5);
+```
+
+### Image Transformations
+
+The library includes functions for geometric transformations:
+
+```typescript
+import { rotateImage, skewImage } from 'deca-image-tools';
+
+// Rotate image by 45 degrees
+const rotatedImage = rotateImage(imageData, 45);
+
+// Skew image horizontally and vertically
+const skewedImage = skewImage(imageData, 0.2, 0.1);
+```
+
+### Saving Images
+
+The library provides functionality to save processed images:
+
+```typescript
+import { saveImage } from 'deca-image-tools';
+
+// Save the processed image to a file
+await saveImage(imageData, 'output.png');
 ```
 
 ## API Reference
@@ -138,13 +166,49 @@ Parameters:
 Returns:
 - New ImageData object with inverted colors
 
+### rotateImage(imageData: ImageData, degrees: number): ImageData
+
+Rotates an image by the specified angle.
+
+Parameters:
+- `imageData`: ImageData object containing the source image
+- `degrees`: Rotation angle in degrees
+
+Returns:
+- New ImageData object containing the rotated image
+
+### skewImage(imageData: ImageData, skewX: number, skewY: number): ImageData
+
+Applies horizontal and vertical skewing to an image.
+
+Parameters:
+- `imageData`: ImageData object containing the source image
+- `skewX`: Horizontal skew factor
+- `skewY`: Vertical skew factor
+
+Returns:
+- New ImageData object containing the skewed image
+
+### saveImage(imageData: ImageData, filePath: string): Promise<void>
+
+Saves an image to a file.
+
+Parameters:
+- `imageData`: ImageData object to save
+- `filePath`: Path where the image should be saved
+
+Returns:
+- Promise that resolves when the image has been saved
+
 ## Technical Details
 
 - The edge detection algorithm uses Sobel operators for gradient calculation
 - Gaussian blur uses a 3x3 kernel with customizable radius
 - Sharpening uses a 3x3 kernel matrix
+- Rotation uses bilinear interpolation for smooth results
 - All operations create new ImageData objects, leaving the original unchanged
-- Alpha channel is preserved in color manipulation operations
+- Alpha channel is preserved in all operations
+- Image saving requires Node.js environment with 'canvas' package
 
 ## Project Structure
 
@@ -187,6 +251,7 @@ npm install
 - Modern browser with Canvas API support
 - TypeScript 4.0+ (for TypeScript users)
 - Node.js 14+ (for development)
+- Node.js canvas package (for image saving functionality)
 
 ## Browser Support
 
@@ -201,7 +266,8 @@ The package supports all modern browsers that implement the Canvas API:
 - Image processing operations are performed on the CPU and may be computationally intensive for large images
 - Consider downscaling large images before processing
 - All operations are synchronous and will block the main thread
-- The Gaussian blur operation may be particularly intensive on large images
+- The Gaussian blur and rotation operations may be particularly intensive on large images
+- Transformation operations may cause some quality loss due to interpolation
 
 ## Contributing
 
@@ -226,6 +292,12 @@ Tom Tarpey (decagondev)
 
 ## Changelog
 
+### 1.0.2
+- Added image rotation support
+- Added image skewing support
+- Added image saving functionality
+- Performance improvements for transformation operations
+
 ### 1.0.1
 - Gaussian blur filter
 - Image sharpening
@@ -239,7 +311,7 @@ Tom Tarpey (decagondev)
 
 ## Acknowledgments
 
-- This package implements several fundamental image processing algorithms including the Sobel edge detection algorithm and Gaussian blur
+- This package implements several fundamental image processing algorithms including the Sobel edge detection algorithm, Gaussian blur, and various geometric transformations
 
 ## Support
 
